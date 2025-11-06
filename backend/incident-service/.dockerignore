@@ -1,0 +1,23 @@
+# Build output
+target/
+
+# IDE/project files
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Git
+.git
+.gitignore
+
+# Environment / secrets
+.env
