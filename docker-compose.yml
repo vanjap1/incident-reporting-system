@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  incident-db:
+    image: mysql:8.0.40
+    container_name: incident-db
+    restart: unless-stopped
+    env_file: ./db/.env
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db/initdb:/docker-entrypoint-initdb.d   # init.sql + seed.sql
+      - incident-db-data:/var/lib/mysql
+    networks:
+      - incident-net
+
+  incident-backend:
+    image: incident-backend-img
+    container_name: incident-backend
+    restart: unless-stopped
+    env_file: ./backend/incident-service/.env
+    ports:
+      - "8085:8085"
+    depends_on:
+      - incident-db
+    networks:
+      - incident-net
+
+volumes:
+  incident-db-data:
+
+networks:
+  incident-net:
+    driver: bridge
