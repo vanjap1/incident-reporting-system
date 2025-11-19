@@ -1,6 +1,3 @@
-# Build output
-target/
-
 # IDE/project files
 .idea/
 *.iml
