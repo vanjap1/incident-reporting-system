@@ -1,1 +1,2 @@
-db/.env
+db/users-db/.env
+db/incident-db/.env
