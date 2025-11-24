@@ -1,19 +1,21 @@
 version: "3.9"
 
 services:
+  # Incident service DB
   incident-db:
     image: mysql:8.0.40
     container_name: incident-db
     restart: unless-stopped
-    env_file: ./db/.env
+    env_file: ./db/incident-db/.env
     ports:
       - "3307:3306"
     volumes:
-      - ./db/initdb:/docker-entrypoint-initdb.d   # init.sql + seed.sql
+      - ./db/incident-db:/docker-entrypoint-initdb.d   # init.sql + seed.sql
       - incident-db-data:/var/lib/mysql
     networks:
-      - incident-net
+      - backend-net
 
+  # Incident backend
   incident-backend:
     image: incident-backend-img
     container_name: incident-backend
@@ -24,11 +26,40 @@ services:
     depends_on:
       - incident-db
     networks:
-      - incident-net
+      - backend-net
+
+  # User service DB
+  users-db:
+    image: mysql:8.0.40
+    container_name: users-db
+    restart: unless-stopped
+    env_file: ./db/users-db/.env
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./db/users-db:/docker-entrypoint-initdb.d   # init.sql + seed.sql for users
+      - user-db-data:/var/lib/mysql
+    networks:
+      - backend-net
+
+  # User backend
+  user-backend:
+    build: ./backend/user-service
+    image: user-backend-img
+    container_name: user-backend
+    restart: unless-stopped
+    env_file: ./backend/user-service/.env
+    ports:
+      - "8082:8082"
+    depends_on:
+      - users-db
+    networks:
+      - backend-net
 
 volumes:
   incident-db-data:
+  user-db-data:
 
 networks:
-  incident-net:
+  backend-net:
     driver: bridge
