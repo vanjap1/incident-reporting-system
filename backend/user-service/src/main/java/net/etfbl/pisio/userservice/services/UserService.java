@@ -1,6 +1,7 @@
 package net.etfbl.pisio.userservice.services;
 
 import net.etfbl.pisio.userservice.dto.UserRequest;
+import net.etfbl.pisio.userservice.exceptions.DuplicateUserException;
 import net.etfbl.pisio.userservice.exceptions.ResourceNotFoundException;
 import net.etfbl.pisio.userservice.mappers.UserMapper;
 import net.etfbl.pisio.userservice.models.User;
@@ -29,6 +30,12 @@ public class UserService {
     }
 
     public User createUser(UserRequest userRequest) {
+        if (userRepository.existsByUsername(userRequest.getUsername())) {
+            throw new DuplicateUserException("Username already taken: " + userRequest.getUsername());
+        }
+        if (userRepository.existsByEmail(userRequest.getEmail())) {
+            throw new DuplicateUserException("Email already registered: " + userRequest.getEmail());
+        }
         User user = userMapper.toEntity(userRequest);
         return userRepository.save(user);
     }
@@ -43,6 +50,13 @@ public class UserService {
         User existing = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
 
+        if (userRepository.existsByUsernameAndIdNot(userRequest.getUsername(),id)) {
+            throw new DuplicateUserException("Username already taken: " + userRequest.getUsername());
+        }
+        if (userRepository.existsByEmailAndIdNot(userRequest.getEmail(),id)) {
+            throw new DuplicateUserException("Email already registered: " + userRequest.getEmail());
+        }
+
         existing.setUsername(userRequest.getUsername());
         existing.setPassword(userRequest.getPassword());
         existing.setEmail(userRequest.getEmail());
@@ -51,5 +65,10 @@ public class UserService {
         existing.setRoles(userRequest.getRoles());
 
         return userRepository.save(existing);
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElse(null);
     }
 }

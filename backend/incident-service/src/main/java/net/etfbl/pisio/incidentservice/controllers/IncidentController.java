@@ -1,13 +1,12 @@
 package net.etfbl.pisio.incidentservice.controllers;
 
 import net.etfbl.pisio.incidentservice.dto.IncidentRequest;
-import net.etfbl.pisio.incidentservice.exceptions.ResourceNotFoundException;
 import net.etfbl.pisio.incidentservice.models.Incident;
 import net.etfbl.pisio.incidentservice.services.IncidentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/incidents")
