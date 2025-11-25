@@ -1,11 +1,14 @@
 package net.etfbl.pisio.incidentservice.services;
 
+import jakarta.validation.Valid;
 import net.etfbl.pisio.incidentservice.dto.IncidentRequest;
+import net.etfbl.pisio.incidentservice.exceptions.DuplicateIncidentException;
 import net.etfbl.pisio.incidentservice.exceptions.ResourceNotFoundException;
 import net.etfbl.pisio.incidentservice.mappers.IncidentMapper;
 import net.etfbl.pisio.incidentservice.models.Incident;
 import net.etfbl.pisio.incidentservice.repositories.IncidentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -29,7 +32,7 @@ public class IncidentService {
         return incidentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Incident not found with id " + id));
     }
 
-    public Incident createIncident(IncidentRequest incidentRequest) {
+    public Incident createIncident(@Valid @RequestBody IncidentRequest incidentRequest) {
         Incident incident = incidentMapper.toEntity(incidentRequest);
         return incidentRepository.save(incident);
     }
