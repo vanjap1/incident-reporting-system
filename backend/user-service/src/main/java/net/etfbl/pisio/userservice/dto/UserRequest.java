@@ -28,9 +28,7 @@ public class UserRequest {
     @Email(message = "Email must be valid")
     private String email;
 
-    private String provider;
-    private String providerId;
 
-    @NotNull(message = "Roles must be provided")
-    private Set<User.Role> roles;
+    @NotNull(message = "Role must be provided")
+    private User.Role role;
 }

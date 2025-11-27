@@ -20,8 +20,13 @@ public class Incident {
     private double latitude;
     private double longitude;
 
-    private String type;
-    private String subtype;
+    @ManyToOne
+    @JoinColumn(name = "type_id")
+    private IncidentType type;
+
+    @ManyToOne
+    @JoinColumn(name = "subtype_id")
+    private IncidentSubtype subtype;
 
     @Column(length = 1000)
     private String description;
@@ -34,6 +39,6 @@ public class Incident {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum Status {
-        PENDING, APPROVED, REJECTED
+        PENDING, APPROVED, REJECTED, DELETED
     }
 }

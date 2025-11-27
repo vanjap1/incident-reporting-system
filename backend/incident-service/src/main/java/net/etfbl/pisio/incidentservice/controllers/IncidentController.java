@@ -6,6 +6,8 @@ import net.etfbl.pisio.incidentservice.services.IncidentService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.List;
 
 
 @RestController
@@ -44,5 +46,28 @@ public class IncidentController {
         Incident updated = incidentService.updateIncident(id, incident);
         return ResponseEntity.ok(updated);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<?> getFilteredIncidents(
+            @RequestParam(required = false) String type,
+            @RequestParam(required = false) String subtype,
+            @RequestParam(required = false) Integer days,
+            @RequestParam(required = false) Double minLat,
+            @RequestParam(required = false) Double maxLat,
+            @RequestParam(required = false) Double minLon,
+            @RequestParam(required = false) Double maxLon) {
+
+        LocalDateTime fromDate = null;
+        if (days != null) {
+            fromDate = LocalDateTime.now().minusDays(days);
+        }
+
+        List<Incident> results = incidentService.filterIncidents(
+                type, subtype, fromDate, minLat, maxLat, minLon, maxLon
+        );
+
+        return ResponseEntity.ok(results);
+    }
+
 
 }

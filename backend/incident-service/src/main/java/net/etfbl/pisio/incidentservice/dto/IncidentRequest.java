@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
+import net.etfbl.pisio.incidentservice.models.IncidentSubtype;
+import net.etfbl.pisio.incidentservice.models.IncidentType;
 
 @Data
 public class IncidentRequest {
@@ -15,12 +17,10 @@ public class IncidentRequest {
     @NotNull(message = "Longitude is required")
     private Double longitude;
 
-    @NotBlank(message = "Type is required")
-    @Size(max = 50, message = "Type must be at most 50 characters")
-    private String type;
+    @NotNull(message = "Type ID is required")
+    private Long typeId;
 
-    @Size(max = 50, message = "Subtype must be at most 50 characters")
-    private String subtype;
+    private Long subtypeId;
 
     @Size(max = 255, message = "Description must be at most 255 characters")
     private String description;

@@ -7,9 +7,12 @@ import net.etfbl.pisio.incidentservice.exceptions.ResourceNotFoundException;
 import net.etfbl.pisio.incidentservice.mappers.IncidentMapper;
 import net.etfbl.pisio.incidentservice.models.Incident;
 import net.etfbl.pisio.incidentservice.repositories.IncidentRepository;
+import net.etfbl.pisio.incidentservice.repositories.IncidentSubtypeRepository;
+import net.etfbl.pisio.incidentservice.repositories.IncidentTypeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -17,10 +20,14 @@ import java.util.List;
 public class IncidentService {
     private final IncidentRepository incidentRepository;
     private final IncidentMapper incidentMapper;
+    private final IncidentTypeRepository incidentTypeRepository;
+    private final IncidentSubtypeRepository incidentSubtypeRepository;
 
-    public IncidentService(IncidentRepository incidentRepository, IncidentMapper incidentMapper) {
+    public IncidentService(IncidentRepository incidentRepository, IncidentMapper incidentMapper, IncidentTypeRepository incidentTypeRepository, IncidentSubtypeRepository incidentSubtypeRepository) {
         this.incidentRepository = incidentRepository;
         this.incidentMapper = incidentMapper;
+        this.incidentTypeRepository = incidentTypeRepository;
+        this.incidentSubtypeRepository = incidentSubtypeRepository;
     }
 
 
@@ -46,8 +53,9 @@ public class IncidentService {
         Incident existing = incidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Incident not found with id " + id));
 
-        existing.setType(incidentRequest.getType());
-        existing.setSubtype(incidentRequest.getSubtype());
+
+        existing.setType(incidentTypeRepository.findById(incidentRequest.getTypeId()).orElseThrow(() -> new ResourceNotFoundException("Incident type not found with id " + incidentRequest.getTypeId())));
+        existing.setSubtype(incidentSubtypeRepository.findById(incidentRequest.getSubtypeId()).orElse(null));
         existing.setLatitude(incidentRequest.getLatitude());
         existing.setLongitude(incidentRequest.getLongitude());
         existing.setDescription(incidentRequest.getDescription());
@@ -55,4 +63,28 @@ public class IncidentService {
 
         return incidentRepository.save(existing);
     }
+
+    public List<Incident> filterIncidents(String type,
+                                          String subtype,
+                                          LocalDateTime fromDate,
+                                          Double minLat, Double maxLat,
+                                          Double minLon, Double maxLon) {
+
+        return incidentRepository.findAll().stream()
+                // filter by type if provided
+                .filter(i -> type == null ||
+                        (i.getType() != null && i.getType().getName().equalsIgnoreCase(type)))
+                // filter by subtype if provided
+                .filter(i -> subtype == null ||
+                        (i.getSubtype() != null && i.getSubtype().getName().equalsIgnoreCase(subtype)))
+                // filter by time if provided
+                .filter(i -> fromDate == null || i.getCreatedAt().isAfter(fromDate))
+                // filter by location bounding box if provided
+                .filter(i -> minLat == null || maxLat == null || minLon == null || maxLon == null ||
+                        (i.getLatitude() >= minLat && i.getLatitude() <= maxLat &&
+                                i.getLongitude() >= minLon && i.getLongitude() <= maxLon))
+                .toList();
+    }
+
+
 }

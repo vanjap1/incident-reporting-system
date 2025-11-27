@@ -20,10 +20,12 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
     public String generateToken(User user) {
-
+        long expirationMillis = 1000 * 60 * 60; // 1 hour
         return Jwts.builder()
-                .setSubject(user.getUsername())
-                .claim("roles",user.getRoles())
+                .setSubject(user.getEmail())
+                .claim("role",user.getRole().toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))
                 .signWith(key)
                 .compact();
     }

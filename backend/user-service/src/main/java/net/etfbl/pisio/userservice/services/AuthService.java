@@ -6,7 +6,6 @@ import net.etfbl.pisio.userservice.dto.UserRequest;
 import net.etfbl.pisio.userservice.models.User;
 import net.etfbl.pisio.userservice.security.JwtUtil;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +23,7 @@ public class AuthService {
     }
 
     public String login(@Valid @RequestBody LoginRequest request) {
-        User user = userService.findByUsername(request.getUsername());
+        User user = userService.getUserByUsername(request.getUsername());
         if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return jwtUtil.generateToken(user);
         }

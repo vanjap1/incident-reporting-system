@@ -29,7 +29,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Log every request path
         System.out.println("JwtAuthenticationFilter invoked for: " + request.getRequestURI());
 
         String authHeader = request.getHeader("Authorization");
@@ -43,12 +42,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String username = claims.getSubject();
                 System.out.println("Token valid for user: " + username);
 
-                List<String> roles = claims.get("roles", List.class);
-                System.out.println("Roles extracted: " + roles);
+                // Extract single role from JWT
+                String role = claims.get("role", String.class);
+                System.out.println("Role extracted: " + role);
 
-                List<SimpleGrantedAuthority> authorities = roles.stream()
-                        .map(SimpleGrantedAuthority::new)
-                        .toList();
+                // Wrap into a single authority
+                List<SimpleGrantedAuthority> authorities =
+                        List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
@@ -66,5 +66,4 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
 }
