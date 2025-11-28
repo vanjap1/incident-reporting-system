@@ -25,6 +25,7 @@ services:
       - "8085:8085"
     depends_on:
       - incident-db
+      - config-server
     networks:
       - backend-net
 
@@ -54,8 +55,22 @@ services:
       - "8082:8082"
     depends_on:
       - users-db
+      - config-server
     networks:
       - backend-net
+
+  config-server:
+    build: ./backend/config-server
+    image: config-server-img
+    container_name: config-server
+    restart: unless-stopped
+    ports:
+      - "8888:8888"
+    env_file:
+      - ./backend/config-server/.env
+    networks:
+      - backend-net
+
 
 volumes:
   incident-db-data:
