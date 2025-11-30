@@ -71,6 +71,16 @@ services:
     networks:
       - backend-net
 
+  service-discovery-server:
+    build: ./backend/service-discovery-server
+    image: service-discovery-server-img
+    container_name: service-discovery-server
+    restart: unless-stopped
+    ports:
+      - "8761:8761"
+    networks:
+      - backend-net
+
 
 volumes:
   incident-db-data:
