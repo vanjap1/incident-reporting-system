@@ -5,8 +5,6 @@ services:
     container_name: incident-db
     restart: unless-stopped
     env_file: ./db/incident-db/.env
-    ports:
-      - "3307:3306"
     volumes:
       - incident-db-data:/var/lib/mysql
     networks:
@@ -21,8 +19,6 @@ services:
     environment:
       - JWT_SECRET=${JWT_SECRET}
     env_file: ./backend/incident-service/.env
-    ports:
-      - "8085:8085"
     depends_on:
       - incident-db
       - config-server
@@ -35,8 +31,6 @@ services:
     container_name: users-db
     restart: unless-stopped
     env_file: ./db/users-db/.env
-    ports:
-      - "3308:3306"
     volumes:
       - user-db-data:/var/lib/mysql
     networks:
@@ -51,8 +45,6 @@ services:
     environment:
       - JWT_SECRET=${JWT_SECRET}
     env_file: ./backend/user-service/.env
-    ports:
-      - "8082:8082"
     depends_on:
       - users-db
       - config-server
@@ -64,8 +56,6 @@ services:
     image: config-server-img
     container_name: config-server
     restart: unless-stopped
-    ports:
-      - "8888:8888"
     env_file:
       - ./backend/config-server/.env
     networks:
@@ -76,10 +66,23 @@ services:
     image: service-discovery-server-img
     container_name: service-discovery-server
     restart: unless-stopped
-    ports:
-      - "8761:8761"
     networks:
       - backend-net
+
+  api-gateway:
+    build: ./backend/api-gateway
+    image: api-gateway-img
+    container_name: api-gateway
+    restart: unless-stopped
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    env_file:
+      - ./backend/api-gateway/.env
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-net
+
 
 
 volumes:
