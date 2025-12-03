@@ -12,7 +12,6 @@ services:
 
   # Incident backend
   incident-backend:
-    build: ./backend/incident-service
     image: vanjap1/incident-service:latest
     container_name: incident-backend
     restart: unless-stopped
@@ -38,7 +37,6 @@ services:
 
   # User backend
   user-backend:
-    build: ./backend/user-service
     image: vanjap1/user-service:latest
     container_name: user-backend
     restart: unless-stopped
@@ -52,7 +50,6 @@ services:
       - backend-net
 
   config-server:
-    build: ./backend/config-server
     image: vanjap1/config-server:latest
     container_name: config-server
     restart: unless-stopped
@@ -62,7 +59,6 @@ services:
       - backend-net
 
   service-discovery-server:
-    build: ./backend/service-discovery-server
     image: vanjap1/service-discovery:latest
     container_name: service-discovery-server
     restart: unless-stopped
@@ -70,7 +66,6 @@ services:
       - backend-net
 
   api-gateway:
-    build: ./backend/api-gateway
     image: vanjap1/api-gateway:latest
     container_name: api-gateway
     restart: unless-stopped
