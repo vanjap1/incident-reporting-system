@@ -37,7 +37,7 @@ jobs:
           context: ./backend/${{ matrix.service }}
           push: true
           tags: |
-            ghcr.io/${{ github.repository }}/{{ matrix.service }}:latest
-            ghcr.io/${{ github.repository }}/{{ matrix.service }}:${{ github.sha }}
+            ghcr.io/${{ github.repository }}/${{ matrix.service }}:latest
+            ghcr.io/${{ github.repository }}/${{ matrix.service }}:${{ github.sha }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/${{ matrix.service }}:cache
           cache-to: type=registry,ref=ghcr.io/${{ github.repository }}/${{ matrix.service }}:cache,mode=max
