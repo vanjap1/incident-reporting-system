@@ -19,11 +19,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Log in to DockerHub
+      - name: Log in to GHCR
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Build & push ${{ matrix.service }}
         uses: docker/build-push-action@v5
@@ -31,10 +32,10 @@ jobs:
           context: ./backend/${{ matrix.service }}
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ env.IMAGE_TAG }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:${{ github.sha }}
-          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:cache
-          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:cache,mode=max
+            ghcr.io/${{ github.repository }}/${{ matrix.service }}:${{ env.IMAGE_TAG }}
+            ghcr.io/${{ github.repository }}/${{ matrix.service }}:${{ github.sha }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/${{ matrix.service }}:cache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}/${{ matrix.service }}:cache,mode=max
 
   test-compose:
     runs-on: ubuntu-latest
@@ -43,11 +44,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Log in to DockerHub
+      - name: Log in to GHCR
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
       - name: Override JWT secret
         run: echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
