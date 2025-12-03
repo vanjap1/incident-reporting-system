@@ -13,7 +13,7 @@ services:
   # Incident backend
   incident-backend:
     build: ./backend/incident-service
-    image: incident-backend-img
+    image: vanjap1/incident-service:latest
     container_name: incident-backend
     restart: unless-stopped
     environment:
@@ -39,7 +39,7 @@ services:
   # User backend
   user-backend:
     build: ./backend/user-service
-    image: user-backend-img
+    image: vanjap1/user-service:latest
     container_name: user-backend
     restart: unless-stopped
     environment:
@@ -53,7 +53,7 @@ services:
 
   config-server:
     build: ./backend/config-server
-    image: config-server-img
+    image: vanjap1/config-server:latest
     container_name: config-server
     restart: unless-stopped
     env_file:
@@ -63,7 +63,7 @@ services:
 
   service-discovery-server:
     build: ./backend/service-discovery-server
-    image: service-discovery-server-img
+    image: vanjap1/service-discovery:latest
     container_name: service-discovery-server
     restart: unless-stopped
     networks:
@@ -71,7 +71,7 @@ services:
 
   api-gateway:
     build: ./backend/api-gateway
-    image: api-gateway-img
+    image: vanjap1/api-gateway:latest
     container_name: api-gateway
     restart: unless-stopped
     environment:
@@ -82,8 +82,6 @@ services:
       - "8080:8080"
     networks:
       - backend-net
-
-
 
 volumes:
   incident-db-data:
