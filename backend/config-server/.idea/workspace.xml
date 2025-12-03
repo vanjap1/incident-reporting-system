@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="421bf695-f57d-4f55-88b3-e7fc58394d42" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../incident-service/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../incident-service/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/Dockerfile" afterDir="false" />
-    </list>
+    <list default="true" id="421bf695-f57d-4f55-88b3-e7fc58394d42" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -46,7 +41,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "feature/cicd",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -83,7 +78,7 @@
       <workItem from="1764418425661" duration="176000" />
       <workItem from="1764428440477" duration="1983000" />
       <workItem from="1764539173502" duration="5653000" />
-      <workItem from="1764775450064" duration="792000" />
+      <workItem from="1764775450064" duration="1263000" />
     </task>
     <servers />
   </component>
