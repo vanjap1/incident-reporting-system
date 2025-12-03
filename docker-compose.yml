@@ -1,0 +1,94 @@
+services:
+  # Incident service DB
+  incident-db:
+    image: mysql:8.0.40
+    container_name: incident-db
+    restart: unless-stopped
+    env_file: ./db/incident-db/.env
+    volumes:
+      - incident-db-data:/var/lib/mysql
+    networks:
+      - backend-net
+
+  # Incident backend
+  incident-backend:
+    build: ./backend/incident-service
+    image: incident-backend-img
+    container_name: incident-backend
+    restart: unless-stopped
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    env_file: ./backend/incident-service/.env
+    depends_on:
+      - incident-db
+      - config-server
+    networks:
+      - backend-net
+
+  # User service DB
+  users-db:
+    image: mysql:8.0.40
+    container_name: users-db
+    restart: unless-stopped
+    env_file: ./db/users-db/.env
+    volumes:
+      - user-db-data:/var/lib/mysql
+    networks:
+      - backend-net
+
+  # User backend
+  user-backend:
+    build: ./backend/user-service
+    image: user-backend-img
+    container_name: user-backend
+    restart: unless-stopped
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    env_file: ./backend/user-service/.env
+    depends_on:
+      - users-db
+      - config-server
+    networks:
+      - backend-net
+
+  config-server:
+    build: ./backend/config-server
+    image: config-server-img
+    container_name: config-server
+    restart: unless-stopped
+    env_file:
+      - ./backend/config-server/.env
+    networks:
+      - backend-net
+
+  service-discovery-server:
+    build: ./backend/service-discovery-server
+    image: service-discovery-server-img
+    container_name: service-discovery-server
+    restart: unless-stopped
+    networks:
+      - backend-net
+
+  api-gateway:
+    build: ./backend/api-gateway
+    image: api-gateway-img
+    container_name: api-gateway
+    restart: unless-stopped
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    env_file:
+      - ./backend/api-gateway/.env
+    ports:
+      - "8080:8080"
+    networks:
+      - backend-net
+
+
+
+volumes:
+  incident-db-data:
+  user-db-data:
+
+networks:
+  backend-net:
+    driver: bridge
