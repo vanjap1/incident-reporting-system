@@ -23,27 +23,6 @@ jobs:
           java-version: "17"
           distribution: "temurin"
 
-      # Build each backend project JAR
-      - name: Build incident-service JAR
-        working-directory: backend/incident-service
-        run: mvn clean package -DskipTests
-
-      - name: Build user-service JAR
-        working-directory: backend/user-service
-        run: mvn clean package -DskipTests
-
-      - name: Build api-gateway JAR
-        working-directory: backend/api-gateway
-        run: mvn clean package -DskipTests
-
-      - name: Build config-server JAR
-        working-directory: backend/config-server
-        run: mvn clean package -DskipTests
-
-      - name: Build service-discovery JAR
-        working-directory: backend/service-discovery-server
-        run: mvn clean package -DskipTests
-
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
