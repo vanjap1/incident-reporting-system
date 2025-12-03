@@ -1,87 +1,73 @@
-services:
-  # Incident service DB
-  incident-db:
-    image: mysql:8.0.40
-    container_name: incident-db
-    restart: unless-stopped
-    env_file: ./db/incident-db/.env
-    volumes:
-      - incident-db-data:/var/lib/mysql
-    networks:
-      - backend-net
+name: CI/CD
 
-  # Incident backend
-  incident-backend:
-    image: vanjap1/incident-service:latest
-    container_name: incident-backend
-    restart: unless-stopped
-    environment:
-      - JWT_SECRET=${JWT_SECRET}
-    env_file: ./backend/incident-service/.env
-    depends_on:
-      - incident-db
-      - config-server
-    networks:
-      - backend-net
+on:
+  push:
+    branches:
+      - main
+      - feature/**
+  pull_request:
 
-  # User service DB
-  users-db:
-    image: mysql:8.0.40
-    container_name: users-db
-    restart: unless-stopped
-    env_file: ./db/users-db/.env
-    volumes:
-      - user-db-data:/var/lib/mysql
-    networks:
-      - backend-net
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service: [api-gateway, config-server, incident-service, service-discovery-server, user-service]
 
-  # User backend
-  user-backend:
-    image: vanjap1/user-service:latest
-    container_name: user-backend
-    restart: unless-stopped
-    environment:
-      - JWT_SECRET=${JWT_SECRET}
-    env_file: ./backend/user-service/.env
-    depends_on:
-      - users-db
-      - config-server
-    networks:
-      - backend-net
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-  config-server:
-    image: vanjap1/config-server:latest
-    container_name: config-server
-    restart: unless-stopped
-    env_file:
-      - ./backend/config-server/.env
-    networks:
-      - backend-net
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          install: true
+          driver: docker-container
 
-  service-discovery-server:
-    image: vanjap1/service-discovery:latest
-    container_name: service-discovery-server
-    restart: unless-stopped
-    networks:
-      - backend-net
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
 
-  api-gateway:
-    image: vanjap1/api-gateway:latest
-    container_name: api-gateway
-    restart: unless-stopped
-    environment:
-      - JWT_SECRET=${JWT_SECRET}
-    env_file:
-      - ./backend/api-gateway/.env
-    ports:
-      - "8080:8080"
-    networks:
-      - backend-net
+      - name: Build and push ${{ matrix.service }}
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend/${{ matrix.service }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/${{ matrix.service }}:latest
+            ghcr.io/${{ github.repository }}/${{ matrix.service }}:${{ github.sha }}
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/${{ matrix.service }}:cache
+          cache-to: type=registry,ref=ghcr.io/${{ github.repository }}/${{ matrix.service }}:cache,mode=max
 
-volumes:
-  incident-db-data:
-  user-db-data:
+  integration-test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
-networks:
-  backend-net:
-    driver: bridge
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_TOKEN }}
+
+      - name: Pull images
+        run: docker compose pull
+
+      - name: Run stack with Compose
+        run: docker compose up -d
+
+      - name: Wait for services
+        run: sleep 30
+
+      - name: Check running containers
+        run: docker ps
+
+      # Example: health check against API Gateway
+      - name: Test API Gateway health
+        run: curl --fail http://localhost:8080/actuator/health
