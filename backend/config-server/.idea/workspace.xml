@@ -5,34 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="421bf695-f57d-4f55-88b3-e7fc58394d42" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../api-gateway/.dockerignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/.gitattributes" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/mvnw" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/mvnw.cmd" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/pom.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/ApiGatewayApplication.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/dto/JwtResponse.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/dto/UserDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/security/JwtAuthenticationFilter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/security/JwtUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/security/SecurityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/security/WebClientConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/security/oauth2/DomainRestrictingOAuth2UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/java/net/etfbl/pisio/apigateway/security/oauth2/OAuth2LoginSuccessHandler.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../api-gateway/src/main/resources/application.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../user-service/src/main/java/net/etfbl/pisio/userservice/controllers/InternalUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../incident-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../incident-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../incident-service/src/main/java/net/etfbl/pisio/incidentservice/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../incident-service/src/main/java/net/etfbl/pisio/incidentservice/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/java/net/etfbl/pisio/userservice/security/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/src/main/java/net/etfbl/pisio/userservice/security/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/java/net/etfbl/pisio/userservice/security/oauth2/DomainRestrictingOAuth2UserService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/java/net/etfbl/pisio/userservice/security/oauth2/OAuth2LoginSuccessHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-service/src/main/resources/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/../user-service/src/main/resources/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../../docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../api-gateway/.dockerignore" beforeDir="false" afterPath="$PROJECT_DIR$/../api-gateway/.dockerignore" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,7 +43,7 @@
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "feature/api-gateway",
+    "git-widget-placeholder": "master",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -107,6 +80,7 @@
       <workItem from="1764418425661" duration="176000" />
       <workItem from="1764428440477" duration="1983000" />
       <workItem from="1764539173502" duration="5653000" />
+      <workItem from="1764775450064" duration="7000" />
     </task>
     <servers />
   </component>
