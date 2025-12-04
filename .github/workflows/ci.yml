@@ -56,6 +56,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
+      - name: Create .env file for Compose
+        run: |
+          echo "REPO_OWNER=${{ github.repository_owner }}" >> .env
+          echo "REPO_NAME=${{ github.event.repository.name }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
       - name: Pull images
         run: docker compose pull
 

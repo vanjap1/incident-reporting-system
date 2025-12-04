@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   # Incident service DB
   incident-db:
