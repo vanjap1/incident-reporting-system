@@ -86,4 +86,10 @@ jobs:
 
       # Example: health check against API Gateway
       - name: Test API Gateway health
-        run: curl --fail http://localhost:8080/actuator/health
+        run: |
+          for i in {1..10}; do
+            curl --fail http://localhost:8080/actuator/health && exit 0
+            sleep 10
+          done
+          exit 1
+
