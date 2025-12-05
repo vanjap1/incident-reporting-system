@@ -4,7 +4,9 @@ services:
     image: mysql:8.0.40
     container_name: incident-db
     restart: unless-stopped
-    env_file: ./db/incident-db/.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - MYSQL_DATABASE=incidents_db 
     volumes:
       - incident-db-data:/var/lib/mysql
     networks:
@@ -16,8 +18,11 @@ services:
     container_name: incident-backend
     restart: unless-stopped
     environment:
+      - DB_URL=${INCIDENTS_DB_URL}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - PORT=${INCIDENT_SERVICE_PORT}
       - JWT_SECRET=${JWT_SECRET}
-    env_file: ./backend/incident-service/.env
     depends_on:
       - incident-db
       - config-server
@@ -29,7 +34,9 @@ services:
     image: mysql:8.0.40
     container_name: users-db
     restart: unless-stopped
-    env_file: ./db/users-db/.env
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASS}
+      - MYSQL_DATABASE=users_db 
     volumes:
       - user-db-data:/var/lib/mysql
     networks:
@@ -41,8 +48,11 @@ services:
     container_name: user-backend
     restart: unless-stopped
     environment:
+      - DB_URL=${USERS_DB_URL}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+      - PORT=${USER_SERVICE_PORT}
       - JWT_SECRET=${JWT_SECRET}
-    env_file: ./backend/user-service/.env
     depends_on:
       - users-db
       - config-server
@@ -54,7 +64,9 @@ services:
     image: ghcr.io/${REPO_OWNER}/${REPO_NAME}/config-server:latest
     container_name: config-server
     restart: unless-stopped
-    env_file: ./backend/config-server/.env
+    environment:
+      - GIT_USERNAME=${GIT_USERNAME}
+      - GIT_TOKEN=${GIT_TOKEN}
     networks:
       - backend-net
 
@@ -73,7 +85,8 @@ services:
     restart: unless-stopped
     environment:
       - JWT_SECRET=${JWT_SECRET}
-    env_file: ./backend/api-gateway/.env
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
     ports:
       - "8080:8080"
     networks:

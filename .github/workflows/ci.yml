@@ -58,9 +58,17 @@ jobs:
 
       - name: Create .env file for Compose
         run: |
-          echo "REPO_OWNER=${{ github.repository_owner }}" >> .env
+          echo "REPO_OWNER=${{ github.repository_owner }}" > .env
           echo "REPO_NAME=${{ github.event.repository.name }}" >> .env
           echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASS=${{ secrets.DB_PASS }}" >> .env
+          echo "GIT_USERNAME=${{ secrets.GIT_USERNAME }}" >> .env
+          echo "GIT_TOKEN=${{ secrets.GIT_TOKEN }}" >> .env 
+          echo "INCIDENTS_DB_URL=${{ secrets.INCIDENTS_DB_URL }}" >> .env
+          echo "USERS_DB_URL=${{ secrets.USERS_DB_URL }}" >> .env
+          echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> .env
+          echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> .env
 
       - name: Pull images
         run: docker compose pull
