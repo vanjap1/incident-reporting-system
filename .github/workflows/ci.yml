@@ -69,6 +69,8 @@ jobs:
           echo "USERS_DB_URL=${{ secrets.USERS_DB_URL }}" >> .env
           echo "CLIENT_ID=${{ secrets.CLIENT_ID }}" >> .env
           echo "CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}" >> .env
+          echo "USERS_SERVICE_PORT=${{ secrets.USERS_SERVICE_PORT }}" >> .env
+          echo "INCIDENT_SERVICE_PORT=${{ secrets.INCIDENT_SERVICE_PORT }}" >> .env
 
       - name: Pull images
         run: docker compose pull
