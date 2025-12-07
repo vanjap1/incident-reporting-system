@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { getIncidents } from "../services/api"; // import axios call
+import { getIncidents } from "../services/api";
+import MarkerClusterGroup from "react-leaflet-cluster";
 
 export default function MainMap() {
   const [incidents, setIncidents] = useState([]);
@@ -11,7 +12,7 @@ export default function MainMap() {
     const fetchIncidents = async () => {
       try {
         const response = await getIncidents();
-        setIncidents(response.data); // backend returns list of Incident objects
+        setIncidents(response.data);
       } catch (error) {
         console.error("Error fetching incidents:", error);
       }
@@ -31,19 +32,28 @@ export default function MainMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {incidents.map((incident) => (
-          <Marker
-            key={incident.id}
-            position={[incident.latitude, incident.longitude]}
-          >
-            <Popup>
-              <strong>{incident.type?.name}</strong> <br />
-              {incident.subtype?.name} <br />
-              {incident.description} <br />
-              Status: {incident.status}
-            </Popup>
-          </Marker>
-        ))}
+        <MarkerClusterGroup chunkedLoading>
+          {incidents.map((incident) => (
+            <Marker
+              key={incident.id}
+              position={[incident.latitude, incident.longitude]}
+            >
+              <Popup>
+                <strong>{incident.type?.name}</strong> <br />
+                {incident.subtype?.name} <br />
+                {incident.description} <br />
+                Status: {incident.status} <br />
+                {incident.imageUrl && (
+                  <img
+                    src={incident.imageUrl}
+                    alt="Incident"
+                    style={{ width: "150px", marginTop: "5px" }}
+                  />
+                )}
+              </Popup>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
       </MapContainer>
     </div>
   );

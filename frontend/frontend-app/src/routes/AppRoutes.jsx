@@ -3,6 +3,8 @@ import Navbar from "../components/Navbar";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
 import MainMap from "../pages/MainMap";
+import ReportIncident from "../pages/ReportIncident";
+import UserIncidents from "../pages/UserIncidents";
 import NotFound from "../errors/NotFound";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
@@ -29,13 +31,15 @@ export default function AppRoutes() {
           }
         />
         <Route
-          path="/"
+          path="/incidents"
           element={
             <ProtectedRoute>
-              <MainMap />
+              <UserIncidents />
             </ProtectedRoute>
           }
         />
+        <Route path="/" element={<MainMap />} />
+        <Route path="/report" element={<ReportIncident />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

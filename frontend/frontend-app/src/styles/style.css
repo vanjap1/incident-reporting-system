@@ -1,0 +1,9 @@
+:root {
+  --primary-blue: #081845;
+  --primary-red: #a51212;
+  --secondary-red: #ff4c4c;
+}
+
+body {
+  background-color: #e9ecef; /* or #f0f4ff */
+}

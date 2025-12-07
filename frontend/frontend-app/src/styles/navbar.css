@@ -1,0 +1,42 @@
+/* Bootstrap navbar override */
+.navbar {
+  background-color: var(--primary-blue) !important;
+}
+
+/* Brand/logo */
+.navbar-brand {
+  color: var(--primary-red) !important;
+  font-weight: bold;
+}
+
+.navbar-brand:hover {
+  color: var(--secondary-red) !important;
+}
+
+/* Nav links */
+.navbar .nav-link {
+  color: var(--primary-red) !important;
+  margin-right: 1rem;
+}
+
+.navbar .nav-link:hover {
+  color: var(--secondary-red) !important;
+}
+
+.navbar .nav-link.active {
+  font-weight: bold;
+  color: var(--secondary-red) !important;
+}
+
+/* Logout button styled like Bootstrap btn */
+.btn-logout {
+  background-color: var(--primary-red);
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+}
+
+.btn-logout:hover {
+  background-color: var(--secondary-red);
+}

@@ -1,6 +1,7 @@
-import React, { useState, useContext } from "react";
-import { login } from "../services/api"; // import the API helper
+import { useState, useContext } from "react";
+import { login } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
+import "../styles/forms.css";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -18,19 +19,17 @@ export default function Login() {
       console.log("JWT token:", token);
       setToken(token);
       window.location.href = "/";
-      // TODO: save token to localStorage/context and redirect
     } catch (err) {
       console.error("Login failed:", err);
     }
   };
 
   const handleGoogleLogin = () => {
-    // Redirect to your backend's OAuth2 endpoint
     window.location.href = "http://localhost:8080/oauth2/authorization/google";
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "2rem auto" }}>
+    <div className="form-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -39,24 +38,28 @@ export default function Login() {
           placeholder="Username"
           value={form.username}
           onChange={handleChange}
+          className="form-control"
           required
         />
-        <br />
+
         <input
           type="password"
           name="password"
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
+          className="form-control mt-2"
           required
         />
-        <br />
-        <button type="submit">Login</button>
+
+        <button type="submit" className="btn btn-primary mt-3">
+          Login
+        </button>
       </form>
 
       <hr />
 
-      <button onClick={handleGoogleLogin} style={{ marginTop: "1rem" }}>
+      <button onClick={handleGoogleLogin} className="btn btn-danger mt-3">
         Sign in with Google
       </button>
     </div>

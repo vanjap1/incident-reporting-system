@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/forms.css"; // import the same CSS
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
@@ -14,7 +15,7 @@ export default function Register() {
   };
 
   return (
-    <div style={{ maxWidth: "400px", margin: "2rem auto" }}>
+    <div className="form-container">
       <h2>Register</h2>
       <form onSubmit={handleSubmit}>
         <input
@@ -23,28 +24,33 @@ export default function Register() {
           placeholder="Username"
           value={form.username}
           onChange={handleChange}
+          className="form-control"
           required
         />
-        <br />
+
         <input
           type="email"
           name="email"
           placeholder="Email"
           value={form.email}
           onChange={handleChange}
+          className="form-control mt-2"
           required
         />
-        <br />
+
         <input
           type="password"
           name="password"
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
+          className="form-control mt-2"
           required
         />
-        <br />
-        <button type="submit">Register</button>
+
+        <button type="submit" className="btn btn-primary mt-3">
+          Register
+        </button>
       </form>
     </div>
   );
