@@ -15,7 +15,7 @@ export const setAuthToken = (token) => {
 
 export const login = (credentials) => api.post("/auth/login", credentials);
 export const register = (data) => api.post("/auth/register", data);
-export const getIncidents = () => api.get("/incidents");
+export const getApprovedIncidents = () => api.get("/incidents/status/approved");
 export const getIncidentTypes = () => api.get("/incident-types");
 export const getIncidentSubtypes = () => api.get("/incident-subtypes");
 

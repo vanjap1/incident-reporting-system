@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { getIncidents } from "../services/api";
+import { getApprovedIncidents } from "../services/api";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
 export default function MainMap() {
@@ -11,7 +11,7 @@ export default function MainMap() {
   useEffect(() => {
     const fetchIncidents = async () => {
       try {
-        const response = await getIncidents();
+        const response = await getApprovedIncidents();
         setIncidents(response.data);
       } catch (error) {
         console.error("Error fetching incidents:", error);

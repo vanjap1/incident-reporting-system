@@ -92,6 +92,22 @@ services:
     networks:
       - backend-net
 
+   frontend:
+    build: ./frontend/frontend-app
+    container_name: frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount local source so changes mirror inside container
+      - ./frontend/frontend-app/src:/opt/frontend-app/src
+      - ./frontend/frontend-app/public:/opt/frontend-app/public
+      # Keep node_modules inside container (avoid conflicts)
+      - /opt/frontend-app/node_modules
+    depends_on:
+      - api-gateway
+
+
 volumes:
   incident-db-data:
   user-db-data:

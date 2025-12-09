@@ -1,10 +1,12 @@
 import { useState, useContext } from "react";
 import { login } from "../services/api";
 import { AuthContext } from "../context/AuthContext";
+import Alert from "../components/Alert";
 import "../styles/forms.css";
 
 export default function Login() {
   const [form, setForm] = useState({ username: "", password: "" });
+  const [alert, setAlert] = useState({ type: "", message: "" });
   const { setToken } = useContext(AuthContext);
 
   const handleChange = (e) => {
@@ -16,11 +18,11 @@ export default function Login() {
     try {
       const response = await login(form);
       const token = response.data.token;
-      console.log("JWT token:", token);
       setToken(token);
-      window.location.href = "/";
+      setAlert({ type: "success", message: "Login successful!" });
+      setTimeout(() => (window.location.href = "/"), 1000);
     } catch (err) {
-      console.error("Login failed:", err);
+      setAlert({ type: "error", message: "Login failed. Please try again." });
     }
   };
 
@@ -31,6 +33,13 @@ export default function Login() {
   return (
     <div className="form-container">
       <h2>Login</h2>
+
+      <Alert
+        type={alert.type}
+        message={alert.message}
+        onClose={() => setAlert({ type: "", message: "" })}
+      />
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"

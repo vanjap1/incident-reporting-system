@@ -1,22 +1,41 @@
 import React, { useState } from "react";
-import "../styles/forms.css"; // import the same CSS
+import "../styles/forms.css";
+import Alert from "../components/Alert"; // import reusable alert
+import { register } from "../services/api"; // your backend call
 
 export default function Register() {
   const [form, setForm] = useState({ username: "", email: "", password: "" });
+  const [alert, setAlert] = useState({ type: "", message: "" });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: call backend register API
-    console.log("Register submitted:", form);
+    try {
+      const response = await register(form); // call backend
+      setAlert({ type: "success", message: "Registration successful!" });
+      console.log("Register submitted:", response.data);
+      setTimeout(() => (window.location.href = "/login"), 1500);
+    } catch (err) {
+      const errorMsg =
+        err.response?.data?.message || "Registration failed. Please try again.";
+      setAlert({ type: "error", message: errorMsg });
+      console.error("Registration error:", err);
+    }
   };
 
   return (
     <div className="form-container">
       <h2>Register</h2>
+
+      <Alert
+        type={alert.type}
+        message={alert.message}
+        onClose={() => setAlert({ type: "", message: "" })}
+      />
+
       <form onSubmit={handleSubmit}>
         <input
           type="text"
