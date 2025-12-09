@@ -1,3 +1,4 @@
 db/users-db/.env
 db/incident-db/.env
 .env
+frontend/frontend-app/node_modules

@@ -39,10 +39,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = authHeader.substring(7);
             try {
                 Claims claims = jwtUtil.validateToken(token);
-                String email = claims.getSubject();
-                System.out.println("Token valid for user: " + email);
 
-                // Extract single role from JWT
+                // Extract userId from JWT
+                // Option A: if you store userId in "sub"
+                Long userId = Long.valueOf(claims.getSubject());
+
+                // Option B: if you store userId in a custom claim
+                // Long userId = claims.get("userId", Long.class);
+
+                System.out.println("Token valid for userId: " + userId);
+
+                // Extract role from JWT
                 String role = claims.get("role", String.class);
                 System.out.println("Role extracted: " + role);
 
@@ -50,8 +57,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 List<SimpleGrantedAuthority> authorities =
                         List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
+                // Use userId as the principal
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(email, null, authorities);
+                        new UsernamePasswordAuthenticationToken(userId, null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 System.out.println("Authentication set in SecurityContext");

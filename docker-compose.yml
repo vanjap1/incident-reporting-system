@@ -51,6 +51,15 @@ services:
     networks:
       - backend-net
 
+
+  service-discovery-server:
+    build: ./backend/service-discovery-server
+    image: service-discovery-server-img
+    container_name: service-discovery-server
+    restart: unless-stopped
+    networks:
+      - backend-net
+
   config-server:
     build: ./backend/config-server
     image: config-server-img
@@ -58,14 +67,6 @@ services:
     restart: unless-stopped
     env_file:
       - ./backend/config-server/.env
-    networks:
-      - backend-net
-
-  service-discovery-server:
-    build: ./backend/service-discovery-server
-    image: service-discovery-server-img
-    container_name: service-discovery-server
-    restart: unless-stopped
     networks:
       - backend-net
 
@@ -78,6 +79,8 @@ services:
       - JWT_SECRET=${JWT_SECRET}
     env_file:
       - ./backend/api-gateway/.env
+    depends_on:
+      - config-server
     ports:
       - "8080:8080"
     networks:

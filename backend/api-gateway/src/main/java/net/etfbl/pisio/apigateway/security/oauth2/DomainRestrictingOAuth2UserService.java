@@ -15,8 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Service
-public class DomainRestrictingOAuth2UserService
-        implements ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> {
+public class DomainRestrictingOAuth2UserService implements ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final WebClient webClient;
 
@@ -27,34 +26,20 @@ public class DomainRestrictingOAuth2UserService
     @Override
     public Mono<OAuth2User> loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         // Delegate to default reactive loader
-        ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> delegate =
-                new org.springframework.security.oauth2.client.userinfo.DefaultReactiveOAuth2UserService();
+        ReactiveOAuth2UserService<OAuth2UserRequest, OAuth2User> delegate = new org.springframework.security.oauth2.client.userinfo.DefaultReactiveOAuth2UserService();
 
-        return delegate.loadUser(userRequest)
-                .flatMap(oAuth2User -> {
-                    String email = oAuth2User.getAttribute("email");
-                    if (email == null || !email.endsWith("etf.unibl.org")) {
-                        return Mono.error(new OAuth2AuthenticationException(
-                                new OAuth2Error("invalid_domain", "Only etf.unibl.org accounts are allowed", null)
-                        ));
-                    }
+        return delegate.loadUser(userRequest).flatMap(oAuth2User -> {
+            String email = oAuth2User.getAttribute("email");
+            if (email == null || !email.endsWith("etf.unibl.org")) {
+                return Mono.error(new OAuth2AuthenticationException(new OAuth2Error("invalid_domain", "Only etf.unibl.org accounts are allowed", null)));
+            }
 
-                    // Call user-service reactively
-                    return webClient.post()
-                            .uri("/internal/users/find-or-create")
-                            .bodyValue(email)
-                            .retrieve()
-                            .bodyToMono(UserDto.class)
-                            .map(user -> {
-                                SimpleGrantedAuthority authority =
-                                        new SimpleGrantedAuthority("ROLE_" + user.getRole());
+            // Call user-service reactively
+            return webClient.post().uri("/internal/users/find-or-create").bodyValue(email).retrieve().bodyToMono(UserDto.class).map(user -> {
+                SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + user.getRole());
 
-                                return new DefaultOAuth2User(
-                                        List.of(authority),
-                                        oAuth2User.getAttributes(),
-                                        "email"
-                                );
-                            });
-                });
+                return new DefaultOAuth2User(List.of(authority), oAuth2User.getAttributes(), "email");
+            });
+        });
     }
 }

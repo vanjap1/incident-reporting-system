@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.etfbl.pisio.apigateway.dto.JwtResponse;
 import net.etfbl.pisio.apigateway.dto.UserDto;
 import net.etfbl.pisio.apigateway.security.JwtUtil;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.web.server.WebFilterExchange;
@@ -12,6 +15,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+
+import java.net.URI;
+import java.time.Duration;
 
 @Component
 public class OAuth2LoginSuccessHandler implements ServerAuthenticationSuccessHandler {
@@ -39,6 +45,16 @@ public class OAuth2LoginSuccessHandler implements ServerAuthenticationSuccessHan
                 .bodyToMono(UserDto.class)
                 .map(user -> jwtUtil.generateToken(user))
                 .flatMap(token -> {
+                    // 1. Set JWT in secure HttpOnly cookie
+                    ResponseCookie cookie = ResponseCookie.from("jwt", token)
+                            .httpOnly(true)
+                            .secure(true) // only over HTTPS in production
+                            .path("/")
+                            .maxAge(Duration.ofHours(1))
+                            .build();
+                    exchange.getResponse().addCookie(cookie);
+
+                    // 2. Prepare JSON body for API clients
                     JwtResponse jwtResponse = new JwtResponse(token);
                     byte[] bytes;
                     try {
@@ -47,8 +63,12 @@ public class OAuth2LoginSuccessHandler implements ServerAuthenticationSuccessHan
                         return Mono.error(e);
                     }
 
+                    // 3. Redirect browser to React app
+                    exchange.getResponse().setStatusCode(HttpStatus.FOUND);
                     exchange.getResponse().getHeaders()
-                            .setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
+                            .setLocation(URI.create("http://localhost:3000/oauth2/success"));
+                    exchange.getResponse().getHeaders()
+                            .setContentType(MediaType.APPLICATION_JSON);
 
                     return exchange.getResponse()
                             .writeWith(Mono.just(exchange.getResponse()

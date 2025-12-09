@@ -27,4 +27,6 @@ public interface IncidentRepository extends JpaRepository<Incident, Long> {
     List<Incident> findByLatitudeBetweenAndLongitudeBetween(
             double minLat, double maxLat,
             double minLon, double maxLon);
+
+    List<Incident> findByStatus(Incident.Status status);
 }

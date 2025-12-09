@@ -22,7 +22,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public String login(@Valid @RequestBody LoginRequest request) {
+    public String login(LoginRequest request) {
         User user = userService.getUserByUsername(request.getUsername());
         if (user != null && passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             return jwtUtil.generateToken(user);
@@ -30,8 +30,13 @@ public class AuthService {
         throw new BadCredentialsException("Invalid username or password");
     }
 
-    public User register(@Valid @RequestBody UserRequest request) {
+    public User register(UserRequest request) {
         request.setPassword(passwordEncoder.encode(request.getPassword()));
+        request.setRole(User.Role.USER);
         return userService.createUser(request);
+    }
+
+    public User oauth2Login(@Valid String email) {
+        return userService.findOrCreateByEmail(email);
     }
 }

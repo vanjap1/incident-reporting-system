@@ -22,7 +22,7 @@ public class JwtUtil {
     public String generateToken(User user) {
         long expirationMillis = 1000 * 60 * 60; // 1 hour
         return Jwts.builder()
-                .setSubject(user.getEmail())
+                .setSubject(user.getId().toString())
                 .claim("role",user.getRole().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationMillis))

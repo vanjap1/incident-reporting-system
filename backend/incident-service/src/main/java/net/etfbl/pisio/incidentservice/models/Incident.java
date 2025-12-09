@@ -17,6 +17,8 @@ public class Incident {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;
+
     private double latitude;
     private double longitude;
 
@@ -39,6 +41,6 @@ public class Incident {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     public enum Status {
-        PENDING, APPROVED, REJECTED, DELETED
+        PENDING, APPROVED, REJECTED
     }
 }

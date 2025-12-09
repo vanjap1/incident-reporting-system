@@ -4,6 +4,7 @@ import net.etfbl.pisio.incidentservice.dto.IncidentRequest;
 import net.etfbl.pisio.incidentservice.models.Incident;
 import net.etfbl.pisio.incidentservice.services.IncidentService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -19,9 +20,29 @@ public class IncidentController {
         this.incidentService = incidentService;
     }
 
+
     @GetMapping
     public ResponseEntity<?> getAllIncidents() {
         return ResponseEntity.ok(incidentService.getAllIncidents());
+    }
+
+
+    @GetMapping("/status/pending")
+    public ResponseEntity<?> getAllPendingIncidents() {
+        return ResponseEntity.ok(incidentService.getAllPendingIncidents());
+    }
+
+    @GetMapping("/status/approved")
+    public ResponseEntity<?> getAllApprovedIncidents() {
+        return ResponseEntity.ok(incidentService.getAllApprovedIncidents());
+    }
+
+
+    @PutMapping("/{id}/approve")
+    @PreAuthorize("hasRole('MODERATOR')")
+    public ResponseEntity<?> approveIncident(@PathVariable Long id) {
+        Incident approved = incidentService.approveIncident(id);
+        return ResponseEntity.ok(approved);
     }
 
     @GetMapping("/{id}")

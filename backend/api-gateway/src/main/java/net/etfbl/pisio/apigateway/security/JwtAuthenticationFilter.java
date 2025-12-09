@@ -32,13 +32,13 @@ public class JwtAuthenticationFilter implements WebFilter {
 
             try {
                 Claims claims = jwtUtil.validateToken(token);
-                String email = claims.getSubject();
+                Long userId = Long.valueOf(claims.getSubject());
                 String role = claims.get("role", String.class);
 
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
-                                email,
+                                userId,
                                 null,
                                 List.of(new SimpleGrantedAuthority("ROLE_" + role))
                         );

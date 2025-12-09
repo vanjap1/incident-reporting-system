@@ -30,9 +30,24 @@ public class IncidentService {
         this.incidentSubtypeRepository = incidentSubtypeRepository;
     }
 
-
     public List<Incident> getAllIncidents() {
         return incidentRepository.findAll();
+    }
+
+    public List<Incident> getAllPendingIncidents() {
+        return incidentRepository.findByStatus(Incident.Status.PENDING);
+    }
+
+
+    public List<Incident> getAllApprovedIncidents() {
+        return incidentRepository.findByStatus(Incident.Status.APPROVED);
+    }
+
+    public Incident approveIncident(Long id) {
+        Incident incident = incidentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Incident not found with id " + id));
+        incident.setStatus(Incident.Status.APPROVED);
+        return incidentRepository.save(incident);
     }
 
     public Incident getIncidentById(Long id) {

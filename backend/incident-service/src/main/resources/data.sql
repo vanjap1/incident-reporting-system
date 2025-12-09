@@ -14,11 +14,11 @@ INSERT INTO incident_subtypes (type_id, name) VALUES
 ( 3, 'Fatal Accident');
 
 -- Sample Incidents
-INSERT INTO incidents (created_at, description, image_url, latitude, longitude, status, type_id, subtype_id)
+INSERT INTO incidents (created_at, description, user_id, image_url, latitude, longitude, status, type_id, subtype_id)
 VALUES
-    (NOW(), 'Small house fire reported in city center', NULL, 44.78, 17.19, 'PENDING', 1, 1),
-    (NOW(), 'Forest fire spreading near outskirts', NULL, 44.80, 17.25, 'APPROVED', 1, 2),
-    (NOW(), 'River overflow causing local flooding', NULL, 44.76, 17.18, 'PENDING', 2, 3),
-    (NOW(), 'Urban flood blocking main street', NULL, 44.77, 17.20, 'REJECTED', 2, 4),
-    (NOW(), 'Two cars collided, no injuries', NULL, 44.79, 17.21, 'APPROVED', 3, 5),
-    (NOW(), 'Severe accident with casualties', NULL, 44.75, 17.22, 'PENDING', 3, 6);
+    (NOW(), 'Small house fire reported in city center', NULL,NULL, 44.78, 17.19, 'PENDING', 1, 1),
+    (NOW(), 'Forest fire spreading near outskirts', 1,NULL, 44.80, 17.25, 'APPROVED', 1, 2),
+    (NOW(), 'River overflow causing local flooding',NULL, NULL, 44.76, 17.18, 'PENDING', 2, 3),
+    (NOW(), 'Urban flood blocking main street',NULL, NULL, 44.77, 17.20, 'REJECTED', 2, 4),
+    (NOW(), 'Two cars collided, no injuries', NULL,NULL, 44.79, 17.21, 'APPROVED', 3, 5),
+    (NOW(), 'Severe accident with casualties', 3,NULL, 44.75, 17.22, 'PENDING', 3, 6);

@@ -11,6 +11,7 @@ import net.etfbl.pisio.incidentservice.models.IncidentType;
 @Data
 public class IncidentRequest {
 
+    private Long userId;
     @NotNull(message = "Latitude is required")
     private Double latitude;
 

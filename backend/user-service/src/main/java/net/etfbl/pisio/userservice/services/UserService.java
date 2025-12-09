@@ -72,4 +72,11 @@ public class UserService {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with username " + username));
     }
+
+    public User findOrCreateByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseGet(() -> userRepository.save(
+                        new User(null, null, email, User.Role.USER, User.Provider.GOOGLE)
+                ));
+    }
 }
